@@ -3,8 +3,21 @@
     try {
       window.top.location = window.self.location.href;
     } catch (error) {
-      document.documentElement.style.display = 'none';
+      try { document.documentElement.style.display = 'none'; } catch (e) {}
     }
+    return;
+  }
+
+  function reveal() {
+    if (document.body) {
+      document.body.classList.add('ready');
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', reveal, { once: true });
+  } else {
+    reveal();
   }
 
   var langButtons = document.querySelectorAll('[data-lang-btn]');
@@ -26,6 +39,9 @@
   }
 
   function applyLanguage(lang) {
+    if (lang !== 'en' && lang !== 'es') {
+      lang = 'en';
+    }
     document.documentElement.lang = lang;
     setActiveState(langButtons, 'data-lang-btn', lang);
     setActiveState(aboutBlocks, 'data-lang', lang);
